@@ -2,13 +2,18 @@
 
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\Book\BookController;
+use App\Http\Middleware\AgeCheck;
 use Illuminate\Support\Facades\Route;
+
+Route::get('restricted', function() {
+    return "Anda berusia lebih dari 18 tahun!";
+})->middleware(AgeCheck::class);
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
 
-Route::controller(LoginRegisterController::class)->group(function() {
+Route::controller(LoginRegisterController::class)->middleware(AgeCheck::class)->group(function() {
     Route::get('/register', 'register')->name('register');
     Route::post('/store', 'store')->name('store');
     Route::get('/login', 'login')->name('login');
@@ -26,3 +31,6 @@ Route::controller(LoginRegisterController::class)->group(function() {
 //     Route::get('/index', [BookController::class, 'index'])->name('buku.index');
 //     Route::get('buku/store'. [BookController::class, 'store'])->name('buku.store');
 // });
+
+
+
