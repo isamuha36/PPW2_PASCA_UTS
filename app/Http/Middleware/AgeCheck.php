@@ -18,6 +18,6 @@ class AgeCheck
         if ($request->age < 18) {
                 return redirect()->route('welcome') ->withError('Anda berusia kurang dari 18 tahun!');
             } 
-            return $next ($request);
-        }
+        return $next ($request);
     }
+}

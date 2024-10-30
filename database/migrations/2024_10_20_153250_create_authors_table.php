@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('authors', function (Blueprint $table) {
-            $table->id();
+            $table->id(); // id akan secara otomatis menjadi unsignedBigInteger
             $table->string('name');
             $table->timestamps();
-        });
+        });        
     }
 
     /**

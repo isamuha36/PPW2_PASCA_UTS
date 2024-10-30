@@ -23,14 +23,16 @@ class LoginRegisterController extends Controller
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:8|confirmed',
             // password: Wajib diisi, harus minimal 8 karakter, dan harus dikonfirmasi (harus ada field konfirmasi password, biasanya dinamai password_confirmation, yang harus cocok dengan password).
+            'level' => 'required|in:admin,user'
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'level' => $request->level,  // Menyimpan level
         ]); 
 
         // Metode login ini menerima objek pengguna (dalam hal ini objek $user dari model User) dan langsung mengautentikasi pengguna tersebut, tanpa perlu memasukkan kredensial (email dan password) melalui form login.

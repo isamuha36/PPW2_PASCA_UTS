@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Laravel 10 Custom User Registration & Login Tutorial - ALiPHPTricks.com</title>
+    <title>PPW 2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 <body>
@@ -16,6 +16,13 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
+                    @auth
+                        @if (Auth::user()->level === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('books') ? 'active' : '' }}" href="{{ route('books.index') }}">Books</a>
+                            </li>
+                        @endif
+                    @endauth
                     @guest
                         <li class="nav-item">
                             {{-- Fungsi request()->is('login') memeriksa apakah URL saat ini mengarah ke halaman login (apakah URL yang diakses adalah "/login"). --}}
@@ -40,14 +47,22 @@
                                     </form>
                                 </li>
                             </ul>
-                        </li>
+                        </li>    
                     @endguest
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container">
+   
+    <div class="container mt-5">
+        @if($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger" id="error-box">
+                    {{ $error }}
+                </div>
+            @endforeach
+        @endif
         @yield('content')
     </div>
 

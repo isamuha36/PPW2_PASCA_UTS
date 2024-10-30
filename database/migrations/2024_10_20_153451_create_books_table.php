@@ -11,18 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('books', function(Blueprint $table){
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->integer('price');
             $table->text('description')->nullable();
             $table->date('date_of_publication');
-            $table->unsignedBigInteger('author_id'); // foreign key
+            $table->unsignedBigInteger('author_id'); // memastikan tipe unsignedBigInteger
             $table->timestamps(); 
-
-            // foreign key constraint ke author
+        
+            // Menambahkan foreign key ke tabel authors
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
-        });
+        });        
     }
 
     /**
