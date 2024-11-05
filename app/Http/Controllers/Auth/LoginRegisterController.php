@@ -24,15 +24,21 @@ class LoginRegisterController extends Controller
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
             'password' => 'required|min:8|confirmed',
-            // password: Wajib diisi, harus minimal 8 karakter, dan harus dikonfirmasi (harus ada field konfirmasi password, biasanya dinamai password_confirmation, yang harus cocok dengan password).
-            'level' => 'required|in:admin,user'
+            'level' => 'required|in:admin,user',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+            $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('user_photos', 'public');
+        }
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'level' => $request->level,  // Menyimpan level
+            'password' => bcrypt($request->password),
+            'level' => $request->level,
+            'photo' => $photoPath,
         ]); 
 
         // Metode login ini menerima objek pengguna (dalam hal ini objek $user dari model User) dan langsung mengautentikasi pengguna tersebut, tanpa perlu memasukkan kredensial (email dan password) melalui form login.

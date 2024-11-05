@@ -11,7 +11,7 @@ class AuthorsTableSeeder extends Seeder
     public function run(): void
     {
         // Menggunakan Eloquent
-        Author::insert([
+        Author::create([
             ['name' => 'Author 1'],
             ['name' => 'Author 2'],
             ['name' => 'Author 3'],
