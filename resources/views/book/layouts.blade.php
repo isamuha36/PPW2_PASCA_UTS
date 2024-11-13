@@ -17,20 +17,23 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     @auth
-                        @if (Auth::user()->level === 'admin')
-                            <li class="nav-item">
-                                <a class="nav-link {{ request()->is('users') ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
-                            </li>
-                        @endif
+                    @if (Auth::user()->level === 'admin')
                         <li class="nav-item">
-                            <a class="nav-link {{ request()->is('books') ? 'active' : '' }}" href="{{ route('books.index') }}">Books</a>
+                            <a class="nav-link {{ request()->is('users') ? 'active' : '' }}" href="{{ route('users.index') }}">Users</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('authors') ? 'active' : '' }}" href="{{ route('authors.index') }}">Author</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
-                        </li>
+                    @endif
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('books') ? 'active' : '' }}" href="{{ route('books.index') }}">Books</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('authors') ? 'active' : '' }}" href="{{ route('authors.index') }}">Author</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('gallery') ? 'active' : '' }}" href="{{ route('gallery.index') }}">Gallery</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
+                    </li>
                     @endauth
                     @guest
                         <li class="nav-item">

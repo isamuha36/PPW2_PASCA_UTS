@@ -3,9 +3,11 @@
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\Author\AuthorController;
 use App\Http\Controllers\Book\BookController;
+use App\Http\Controllers\Gallery\GalleryController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\AgeCheck;
+use App\Http\Middleware\Users;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -27,7 +29,7 @@ Route::controller(LoginRegisterController::class)->group(function() {
 });
 
 // Route CRUD untuk author
-Route::prefix('authors')->name('authors.')->group(function(){
+Route::middleware(['auth'])->prefix('authors')->name('authors.')->group(function(){
     Route::get('/', [AuthorController::class, 'index'])->name('index');
     Route::get('/create', [AuthorController::class, 'create'])->name('create');
     Route::post('/', [AuthorController::class, 'store'])->name('store');
@@ -38,7 +40,7 @@ Route::prefix('authors')->name('authors.')->group(function(){
 
 
 // Route CRUD untuk buku
-Route::prefix('books')->name('books.')->group(function () {
+Route::middleware(['auth'])->prefix('books')->name('books.')->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('index');               // Menampilkan daftar buku
     Route::get('/create', [BookController::class, 'create'])->name('create');       // Form tambah buku
     Route::post('/', [BookController::class, 'store'])->name('store');              // Menyimpan buku baru
@@ -56,6 +58,15 @@ Route::middleware(['auth', Admin::class])->prefix('users')->name('users.')->grou
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');  // Menghapus user
     Route::put('/{user}', [UserController::class, 'update'])->name('update');       // Mengupdate data buku
     Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');      // Form edit user
+});
+
+Route::middleware(['auth'])->prefix('gallery')->name('gallery.')->group(function() {
+    Route::get('/', [GalleryController::class, 'index'])->name('index');
+    Route::get('/create', [GalleryController::class, 'create'])->name('create');
+    Route::post('/', [GalleryController::class, 'store'])->name('store');
+    Route::get('/{gallery}/edit', [GalleryController::class, 'edit'])->name('edit');
+    Route::delete('/{gallery}', [GalleryController::class, 'destroy'])->name('destroy');
+    Route::put('/gallery/{id}', [GalleryController::class, 'update'])->name('update');
 });
 
 
