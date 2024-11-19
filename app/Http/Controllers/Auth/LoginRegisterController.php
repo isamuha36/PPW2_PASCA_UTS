@@ -4,22 +4,57 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+
 class LoginRegisterController extends Controller
 {
 
 
-    public function register() {
+    public function register()
+    {
         return view('auth.register');
     }
 
-    public function login(){
+    public function login()
+    {
         return view('auth.login');
     }
 
-    public function store(Request $request) {
+    // public function store(Request $request) {
+    //     $request->validate([
+    //         'name' => 'required|string|max:250',
+    //         'email' => 'required|email|max:250|unique:users',
+    //         'password' => 'required|min:8|confirmed',
+    //         'level' => 'required|in:admin,user',
+    //         'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+    //     ]);
+
+    //         $photoPath = null;
+    //     if ($request->hasFile('photo')) {
+    //         $photoPath = $request->file('photo')->store('user_photos', 'public');
+    //     }
+
+    //     $user = User::create([
+    //         'name' => $request->name,
+    //         'email' => $request->email,
+    //         'password' => bcrypt($request->password),
+    //         'level' => $request->level,
+    //         'photo' => $photoPath,
+    //     ]); 
+
+    //     // Metode login ini menerima objek pengguna (dalam hal ini objek $user dari model User) dan langsung mengautentikasi pengguna tersebut, tanpa perlu memasukkan kredensial (email dan password) melalui form login.
+    //     Auth::login($user);
+
+    //     return redirect()->route('dashboard')
+    //         ->withSuccess('You have successfully registered & logged in!');
+    // }
+
+    public function store(Request $request)
+    {
+        // Validasi input
         $request->validate([
             'name' => 'required|string|max:250',
             'email' => 'required|email|max:250|unique:users',
@@ -28,27 +63,39 @@ class LoginRegisterController extends Controller
             'photo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
 
-            $photoPath = null;
+        // Upload foto (opsional)
+        $photoPath = null;
         if ($request->hasFile('photo')) {
             $photoPath = $request->file('photo')->store('user_photos', 'public');
         }
 
+        // Membuat user baru
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'level' => $request->level,
             'photo' => $photoPath,
-        ]); 
+        ]);
 
-        // Metode login ini menerima objek pengguna (dalam hal ini objek $user dari model User) dan langsung mengautentikasi pengguna tersebut, tanpa perlu memasukkan kredensial (email dan password) melalui form login.
+        // Login pengguna
         Auth::login($user);
+
+        // Mengirim email notifikasi menggunakan queue
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'subject' => 'Registrasi Berhasil',
+            'body' => "Selamat, Anda berhasil melakukan registrasi pada tanggal " . now()->format('d-m-Y')
+        ];
+        SendMailJob::dispatch($data);
 
         return redirect()->route('dashboard')
             ->withSuccess('You have successfully registered & logged in!');
     }
 
-    public function authenticate(Request $request) {
+    public function authenticate(Request $request)
+    {
         $request->validate([
             'email' => 'required|email',
             'password' => 'required|min:8'
@@ -64,9 +111,10 @@ class LoginRegisterController extends Controller
         ]);
     }
 
-    public function dashboard(){
-        
-        if(Auth::check()) {
+    public function dashboard()
+    {
+
+        if (Auth::check()) {
             return view('auth.dashboard');
         }
 
@@ -74,7 +122,8 @@ class LoginRegisterController extends Controller
             ->withErrors('Please login to access the dashboard');
     }
 
-    public function logout(Request $request){
+    public function logout(Request $request)
+    {
         // Logout  pengguna dari sesi authentikasi
         Auth::logout();
 

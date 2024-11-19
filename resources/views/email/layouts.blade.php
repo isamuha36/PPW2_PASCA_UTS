@@ -1,4 +1,4 @@
-<!-- resources/views/layouts/layouts.blade.php -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +10,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('books.index') }}">Book Management</a>
+            <a class="navbar-brand" href="{{ route('books.index') }}">Send Email</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>

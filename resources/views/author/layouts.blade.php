@@ -34,6 +34,9 @@
                     <li class="nav-item">
                         <a class="nav-link {{ request()->is('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->is('email') ? 'active' : '' }}" href="{{ route('email.index') }}">Email</a>
+                    </li>
                     @endauth
                     @guest
                         <li class="nav-item">

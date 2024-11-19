@@ -1,4 +1,3 @@
-<!-- resources/views/Book/index.blade.php -->
 @extends('book.layouts')
 
 @section('title', 'Daftar Buku')

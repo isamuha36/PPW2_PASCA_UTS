@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\Author\AuthorController;
 use App\Http\Controllers\Book\BookController;
+use App\Http\Controllers\Email\SendEmailController;
 use App\Http\Controllers\Gallery\GalleryController;
 use App\Http\Controllers\User\UserController;
 use App\Http\Middleware\Admin;
@@ -69,5 +70,9 @@ Route::middleware(['auth'])->prefix('gallery')->name('gallery.')->group(function
     Route::put('/gallery/{id}', [GalleryController::class, 'update'])->name('update');
 });
 
-
+Route::middleware(['auth'])->prefix('email')->name('email.')->group(function() {
+    Route::get('/', [SendEmailController::class, 'index'])->name('index');
+    Route::get('/send-email', [SendEmailController::class, 'index'])->name('kirim-email');
+    Route::post('/post-email', [SendEmailController::class, 'store'])->name('post-email');
+});
 

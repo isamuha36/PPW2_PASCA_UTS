@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Jobs\SendMailJob;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -34,13 +35,21 @@ class UserController extends Controller
             $photoPath = $request->file('photo')->store('user_photos', 'public');
         }
 
-        User::create([
+        $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'level' => $request->level,
             'photo' => $photoPath,
         ]); 
+
+        $data = [
+            'name' => $user->name,
+            'email' => $user->email,
+            'subject' => 'Registrasi Berhasil',
+            'body' => "Selamat, Anda berhasil melakukan registrasi pada tanggal " . now()->format('d-m-Y')
+        ];
+        SendMailJob::dispatch($data);
 
         return redirect()->route('users.index')->with('success', 'User created successfully!');
     }
