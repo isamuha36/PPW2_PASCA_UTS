@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ApiInfo\InfoController;
 use App\Http\Controllers\Auth\LoginRegisterController;
 use App\Http\Controllers\Author\AuthorController;
 use App\Http\Controllers\Book\BookController;
@@ -75,4 +76,3 @@ Route::middleware(['auth'])->prefix('email')->name('email.')->group(function() {
     Route::get('/send-email', [SendEmailController::class, 'index'])->name('kirim-email');
     Route::post('/post-email', [SendEmailController::class, 'store'])->name('post-email');
 });
-
